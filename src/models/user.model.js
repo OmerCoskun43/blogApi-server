@@ -7,7 +7,7 @@ const UserSchema = new mongoose.Schema(
       trim: true,
       required: true,
     },
-    lastname: {
+    lastName: {
       type: String,
       trim: true,
       required: true,
@@ -16,7 +16,16 @@ const UserSchema = new mongoose.Schema(
       type: String,
       trim: true,
       unique: true,
-      required: true,
+      required: [true, "Email must be required !!!"],
+      validate: [
+        (email) => {
+          if (email.includes("@") && email.includes(".") && email.length >= 7) {
+            return true;
+          }
+          return false;
+        },
+        "Email type is incorrect",
+      ],
     },
 
     password: {
