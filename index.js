@@ -26,6 +26,7 @@ app.all("/", (req, res) => {
 });
 
 app.use("/blog", require("./src/routes/blog.router"));
+app.use("/user", require("./src/routes/user.router"));
 
 //! Geçmiş Kayıtları yeni modelime göre güncellemek için Syncronize fonksiyonu tanımladık ve burada bir kere çalıştırıyoruz.
 // sync();
