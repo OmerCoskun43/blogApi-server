@@ -1,4 +1,5 @@
 const { mongoose } = require("../configs/dbConnection.js");
+const passwordEncrypt = require("../helpers/passwordEncrypt.js");
 
 const UserSchema = new mongoose.Schema(
   {
@@ -32,6 +33,7 @@ const UserSchema = new mongoose.Schema(
       type: String,
       required: true,
       trim: true,
+      set: (password) => passwordEncrypt(password),
     },
   },
   {
