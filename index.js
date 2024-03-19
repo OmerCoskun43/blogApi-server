@@ -25,7 +25,7 @@ app.all("/", (req, res) => {
   res.send("Welcome to The Blog API!");
 });
 
-app.use("/blog", require("./src/routes/blog.route"));
+app.use("/blog", require("./src/routes/blog.router"));
 
 //! Geçmiş Kayıtları yeni modelime göre güncellemek için Syncronize fonksiyonu tanımladık ve burada bir kere çalıştırıyoruz.
 // sync();
