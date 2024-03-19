@@ -5,6 +5,9 @@ const User = require("../controllers/user.controller");
 
 router.route("/").get(User.list).post(User.create);
 
+router.post("/login", User.login);
+router.all("/logout", User.logout);
+
 router
   .route("/:id")
   .get(User.read)

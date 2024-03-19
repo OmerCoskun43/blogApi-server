@@ -2,6 +2,7 @@
 require("express-async-errors");
 
 const User = require("../models/user.model");
+const passwordEncrypt = require("../helpers/passwordEncrypt");
 
 module.exports = {
   list: async (req, res) => {
@@ -34,11 +35,12 @@ module.exports = {
   update: async (req, res) => {
     const data = req.body;
     await User.updateOne({ _id: req.params.id }, data);
+    const updateData = await User.findOne({ _id: req.params.id });
 
     res.status(202).send({
       error: false,
       message: "User updated succesfully",
-      data,
+      data: updateData,
     });
   },
   delete: async (req, res) => {
@@ -53,6 +55,49 @@ module.exports = {
         ? "User deleted succesfully"
         : "Data cannot deleted",
       data,
+    });
+  },
+
+  login: async (req, res) => {
+    const { email, password } = req.body;
+
+    if (email && password) {
+      const user = await User.findOne({ email });
+      if (user && user.password == passwordEncrypt(password)) {
+        // req.session = {
+        //   email: user.email,
+        //   password: user.password,
+        // };
+
+        req.session.id = user._id;
+        req.session.password = user.password;
+
+        if (req.body?.remindMe) {
+          req.session.remindMe = req.body.remindMe;
+          // SET maxAge
+          req.sessionOptions.maxAge = 1000 * 60 * 60 * 24 * 3;
+        }
+
+        res.status(200).send({
+          error: false,
+          message: "Login succesfuly",
+          user,
+        });
+      } else {
+        res.statusCode = 401;
+        throw new Error("Password or Email is not valid");
+      }
+    } else {
+      res.statusCode = 401;
+      throw new Error("Email and password are required");
+    }
+  },
+  logout: async (req, res) => {
+    req.session = null;
+
+    res.status(200).send({
+      error: false,
+      message: "Logout OK",
     });
   },
 };
