@@ -6,7 +6,8 @@ const passwordEncrypt = require("../helpers/passwordEncrypt");
 
 module.exports = {
   list: async (req, res) => {
-    const data = await User.find().sort({ createdAt: -1 });
+    // const data = await User.find().sort({ createdAt: -1 });
+    const data = await getModelList(User);
     res.status(200).send({
       error: false,
       message: "Users listed succesfully",

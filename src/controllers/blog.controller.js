@@ -45,12 +45,13 @@ module.exports.BlogPost = {
     //   .skip(skip)
     //   .limit(limit);
 
-    const data = await res.getModelList(BlogPost);
+    const data = await res.getModelList(BlogPost, "blogCategoryId");
 
     // const data = await BlogPost.find();
     res.status(200).send({
       error: false,
       message: "Posts listed succesfully",
+      details: await res.getModelListDetails(BlogPost),
       data,
     });
   },
@@ -65,7 +66,9 @@ module.exports.BlogPost = {
     });
   },
   read: async (req, res) => {
-    const data = await BlogPost.findOne({ _id: req.params.id });
+    const data = await BlogPost.findOne({ _id: req.params.id }).populate(
+      "blogCategoryId"
+    );
 
     res.status(202).send({
       error: false,
@@ -106,6 +109,7 @@ module.exports.BlogCategory = {
     res.status(200).send({
       error: false,
       message: "Categorys listed succesfully",
+      details: await res.getModelListDetails(BlogCategory),
       data,
     });
   },
