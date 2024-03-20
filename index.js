@@ -6,6 +6,7 @@ require("dotenv").config();
 require("express-async-errors");
 const { errorHandler } = require("./src/middlewares/error");
 const { dbConnection } = require("./src/configs/dbConnection");
+const findSearchSortPage = require("./src/middlewares/findSearchSortPage.js");
 // const sync = require("./src/sync.js");
 
 //! .ENV VARIABLES
@@ -31,6 +32,7 @@ app.use(
 );
 
 app.use(require("./src/middlewares/userControl"));
+app.use(findSearchSortPage); // Bunu yukarıda tanımla
 //! ROUTES
 app.all("/", (req, res) => {
   if (req.isLogin) {
